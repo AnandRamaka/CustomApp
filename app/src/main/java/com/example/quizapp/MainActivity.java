@@ -3,12 +3,13 @@ package com.example.quizapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import android.content.SharedPreferences;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -18,26 +19,59 @@ import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
-    TextView scoreBox;
-    TextView questionBox;
+    TextView scoreBox, questionBox, highBox;
     EditText responseText;
     Button submitButton;
-    String[] questions;
+    int highScore;
     Map<String, String> qa;
     int score = 0;
+    public int counter;
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        editor = pref.edit();
+        highScore = pref.getInt("high", 0);
         scoreBox = findViewById(R.id.scoreBox);
         questionBox = findViewById(R.id.questionBox);
+        highBox = findViewById(R.id.highscore);
+        highBox.setText("High Score: " + highScore);
         responseText = findViewById(R.id.answers);
+        final TextView counttime=findViewById(R.id.counttime);
+        new CountDownTimer(21000,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                counttime.setText(String.valueOf(20-counter));
+                counter++;
+            }
+            @Override
+            public void onFinish() {
+                counttime.setText("Finished");
+                submitButton.setOnClickListener(null);
+                highScore = Math.max(score, highScore);
+                editor.putInt("high", highScore);
+                editor.commit();
+                highBox.setText("High Score: " + highScore);
+            }
+        }.start();
         qa = new HashMap<String, String>() {{
             put("1+1", "2");
+            put("16/4", "4");
+            put("5+9", "14");
+            put("45/9", "5");
             put("11-8", "3");
             put("2+3", "5");
+            put("12+19", "31");
             put("5*2", "10");
+            put("3*7", "21");
+            put("11*4", "44");
             put("20/5", "4");
+            put("-4+1", "-3");
+            put("4+7", "11");
+            put("3*-12", "-36");
             put("6-7", "-1");
         }};
         submitButton = findViewById(R.id.submitButton);
