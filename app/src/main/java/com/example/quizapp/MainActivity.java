@@ -1,7 +1,9 @@
 package com.example.quizapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -20,6 +22,7 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     TextView scoreBox, questionBox, highBox;
+    ConstraintLayout CL;
     EditText responseText;
     Button submitButton;
     int highScore;
@@ -40,11 +43,13 @@ public class MainActivity extends AppCompatActivity {
         highBox = findViewById(R.id.highscore);
         highBox.setText("High Score: " + highScore);
         responseText = findViewById(R.id.answers);
+        CL = (ConstraintLayout)(findViewById(R.id.CL1));
+
         final TextView counttime=findViewById(R.id.counttime);
         new CountDownTimer(21000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                counttime.setText(String.valueOf(20-counter));
+                counttime.setText("Time left: " + String.valueOf(20-counter));
                 counter++;
             }
             @Override
@@ -54,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 highScore = Math.max(score, highScore);
                 editor.putInt("high", highScore);
                 editor.commit();
+                CL.setBackgroundColor(Color.RED);
                 highBox.setText("High Score: " + highScore);
             }
         }.start();
