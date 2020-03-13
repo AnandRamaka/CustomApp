@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -31,10 +32,14 @@ public class MainActivity extends AppCompatActivity {
     public int counter;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+    public void onFragmentationInteraction(Uri uri){
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Gson gson = new Gson();
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         editor = pref.edit();
         highScore = pref.getInt("high", 0);
