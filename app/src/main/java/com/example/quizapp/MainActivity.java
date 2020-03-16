@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.content.SharedPreferences;
+
+import com.google.gson.Gson;
+
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -32,14 +35,13 @@ public class MainActivity extends AppCompatActivity {
     public int counter;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
-    public void onFragmentationInteraction(Uri uri){
-
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Gson gson = new Gson();
+        Gson gson = new Gson();
+        Person p = new Person("John");
+        String json = gson.toJson(p);
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         editor = pref.edit();
         highScore = pref.getInt("high", 0);
